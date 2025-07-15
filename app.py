@@ -1,27 +1,3 @@
-# 🚗 Smart Real-Time EV Charging Station Navigation App
-
-This Kivy-based app helps electric vehicle (EV) users locate nearby charging stations on an interactive map. It fetches real-time station data using the OpenChargeMap API and displays markers on the map for quick navigation.
-
----
-
-## Features
-
-- Interactive map using `kivy_garden.mapview`
-- Fetches charging station data dynamically via OpenChargeMap API
-- Displays charging stations as map markers
-- Simple and user-friendly interface with a “Find Charging Stations” button
-
----
-
-## How It Works
-
-When you tap the **Find Charging Stations** button, the app requests charging station data (limited to 5 stations for demo) and adds map markers for each location.
-
----
-
-## Code Snippet
-
-```python
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -32,7 +8,7 @@ class ChargingStationApp(App):
     def build(self):
         layout = BoxLayout(orientation='vertical')
 
-        # Create a MapView centered at San Francisco
+        # Create a MapView centered at a default location (San Francisco)
         self.mapview = MapView(zoom=10, lat=37.7749, lon=-122.4194)
 
         # Button to fetch charging station locations
@@ -46,11 +22,13 @@ class ChargingStationApp(App):
         return layout
 
     def fetch_charging_stations(self, instance):
+        """ Fetch real-time charging station data (Mock API) """
         try:
             response = requests.get("https://api.openchargemap.io/v3/poi/?output=json&countrycode=US&maxresults=5")
             stations = response.json()
             
-            for station in stations[:5]:
+            # Loop through the stations and add markers
+            for station in stations[:5]:  # Limit to 5 stations for demo
                 lat = station["AddressInfo"]["Latitude"]
                 lon = station["AddressInfo"]["Longitude"]
                 marker = MapMarker(lat=lat, lon=lon)
@@ -59,5 +37,5 @@ class ChargingStationApp(App):
         except Exception as e:
             print("Error fetching stations:", e)
 
-if __name__ == "__main__":
-    ChargingStationApp().run()
+# Run the App
+ChargingStationApp().run()
